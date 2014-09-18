@@ -1,7 +1,6 @@
 language: scala
 jdk:
 - oraclejdk7
-sudo: false
 cache:
   directories:
   - $HOME/.ivy2
@@ -18,4 +17,5 @@ after_script:
 - rm -rf ci
 env:
   global:
-    secure: IodRc9ruerjUhlXt0+8sXBIHjsWxLR9qnd2IGRzEJ01Dn5uVue2dlspWa/kVJgZn3uSgP3Y8JyiwUrpxgB/oOUigCStiaaQDiaGAQy/wWkUCBOs5dib5EuppmEl1jthl/gQ0rxyWmqpxaeJsuIfFu6tgeOurIDZ5podZUVXHXe0=
+  - secure: dZU2gSJnI3XNPiewD1WI7n7isDUxdPosL9wUd4iEco6iCYcOkJAKFZZd6QfL+dieYs27xDSEquUdzyCABKrHSIGCx2sBRCgofiErLRgM9haRW5XKWdFIyDBNLkVnARvbzrqJI4E0LfMPzFYFJRXlo+pon5AZoOYONC5hgTAugsA=
+  - secure: UJtXfxoHOsDyAU8raKsAP3QQHAbyZVMZVEi/WkBZwnQTSM1HMGf++sSG+nt1uKAdFDxZ2BT/K8cumk38huKVoBZ9wkIlbXsguh8vS+TH3Mz4stlIsHsdYK6IWSVmL6W0Y+PrGGnx8R6NyT9Th11NX+5JE16Mof9PvjUkDTrXL/8=

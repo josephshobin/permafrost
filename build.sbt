@@ -3,15 +3,12 @@ uniform.project("permafrost", "au.com.cba.omnia.permafrost")
 uniformDependencySettings
 
 libraryDependencies :=
-  depend.scaldingproject() ++
-  depend.scalaz() ++
+  depend.hadoop() ++ depend.scalaz() ++ depend.testing() ++
   Seq(
-    "au.com.cba.omnia" %% "omnitool-core" % "0.2.0-20140325115102",
-    "au.com.cba.omnia" %% "tardis"        % "1.1.0-20140326134908",
-    "au.com.cba.omnia" %% "omnia-test"    % "1.2.1-20140325113325" % "test"
+    "org.apache.avro" % "avro-mapred" % "1.7.4"
   )
 
-uniformAssemblySettings
+publishArtifact in Test := true
 
 uniform.docSettings("https://github.com/CommBank/permafrost")
 
