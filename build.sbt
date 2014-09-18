@@ -12,3 +12,7 @@ libraryDependencies :=
   )
 
 uniformAssemblySettings
+
+uniform.docSettings("https://github.com/CommBank/permafrost")
+
+uniform.ghsettings

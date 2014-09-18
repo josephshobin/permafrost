@@ -1,0 +1,3 @@
+name: permafrost
+exclude: [Gemfile]
+markdown: kramdown
