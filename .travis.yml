@@ -1,0 +1,18 @@
+language: scala
+jdk:
+- oraclejdk7
+cache:
+  directories:
+  - $HOME/.ivy2
+  - $HOME/.m2
+install:
+- git clone https://omnia-bamboo:$OMNIA_CI_PASSWORD@github.com/CommBank/ci.git
+- ci/sbt-setup.sh
+script:
+- sbt -Dsbt.global.base=$TRAVIS_BUILD_DIR/ci '; test; package'
+- ci/sbt-deploy.sh
+after_script:
+- rm -rf ci
+env:
+  global:
+    secure: IodRc9ruerjUhlXt0+8sXBIHjsWxLR9qnd2IGRzEJ01Dn5uVue2dlspWa/kVJgZn3uSgP3Y8JyiwUrpxgB/oOUigCStiaaQDiaGAQy/wWkUCBOs5dib5EuppmEl1jthl/gQ0rxyWmqpxaeJsuIfFu6tgeOurIDZ5podZUVXHXe0=
