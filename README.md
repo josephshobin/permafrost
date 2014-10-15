@@ -1,6 +1,13 @@
 # Permafrost
 
-[![Build Status](https://magnum.travis-ci.com/CommBank/permafrost.svg?token=A3xq7fpHLyey1yCrNASy&branch=master)](https://magnum.travis-ci.com/CommBank/permafrost)
-[![Gitter chat](https://badges.gitter.im/CommBank/permafrost.png)](https://gitter.im/CommBank/permafrost)
+[![Build Status](https://travis-ci.org/CommBank/permafrost.svg?branch=master)](https://travis-ci.org/CommBank/permafrost)
+[![Gitter chat](https://badges.gitter.im/CommBank/maestro.png)](https://gitter.im/CommBank/maestro)
 
-README goes here.
+A lightweight wrapper around the HDFS api to make it monadic.
+
+[Scaladoc](https://commbank.github.io/permafrost/latest/api/index.html)
+
+Usage
+-----
+
+See https://commbank.github.io/permafrost/index.html
