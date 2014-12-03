@@ -8,6 +8,8 @@ libraryDependencies :=
     "org.apache.avro" % "avro-mapred" % "1.7.4"
   )
 
+updateOptions := updateOptions.value.withCachedResolution(true)
+
 publishArtifact in Test := true
 
 uniform.docSettings("https://github.com/CommBank/permafrost")
