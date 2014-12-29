@@ -35,38 +35,40 @@ Hdfs Operations
 ===============
 
 Hdfs operations should:
-  obey monad laws                                 $laws
-  ||| is alias for `or`                           $orAlias
-  or stops at first succeess                      $orFirstOk
-  or continues at first Error                     $orFirstError
-  mandatory success iif result is true            $mandatoryMeansTrue
-  forbidden success iif result is false           $forbiddenMeansFalse
+  obey monad laws                                         $laws
+  ||| is alias for `or`                                   $orAlias
+  or stops at first succeess                              $orFirstOk
+  or continues at first Error                             $orFirstError
+  mandatory success iif result is true                    $mandatoryMeansTrue
+  forbidden success iif result is false                   $forbiddenMeansFalse
 
 Hdfs construction:
-  result is constant                              $result
-  hdfs handles exceptions                         $safeHdfs
-  value handles exceptions                        $safeValue
-  guard success iif condition is true             $guardMeansTrue
-  prevent success iif condition is false          $preventMeansFalse
+  result is constant                                      $result
+  hdfs handles exceptions                                 $safeHdfs
+  value handles exceptions                                $safeValue
+  guard success iif condition is true                     $guardMeansTrue
+  prevent success iif condition is false                  $preventMeansFalse
 
 Hdfs io:
-  isFile should always be false on new path       $isFile
-  isDirectory should always be false on new path  $isDirectory
-  exists should always be false on new path       $exists
-  notExists should always be true on new path     $notExists
-  create -> isFile should always be true          $create
-  mkdirs -> isDirectory should always be true     $mkdirs
-  create -> exists should always be true          $createExists
-  mkdirs -> exists should always be true          $mkdirsExists
-  write -> read should be symmetric               $readwrite
-  create -> move -> exist should always be true   $move
-  can get paths from a glob pattern               $glob
-  read / write lines should be like String#lines  $lines
-  copy to local file should download the file     $copyToLocalFile
-  copy to local file should not create crc        $copyToLocalFileNoCrc
-  copy to temp local should download the files    $copyToTempLocal
-  copy from local file should download the file   $copyFromLocalFile
-
+  isFile should always be false on new path               $isFile
+  isDirectory should always be false on new path          $isDirectory
+  exists should always be false on new path               $exists
+  notExists should always be true on new path             $notExists
+  create -> isFile should always be true                  $create
+  mkdirs -> isDirectory should always be true             $mkdirs
+  create -> exists should always be true                  $createExists
+  mkdirs -> exists should always be true                  $mkdirsExists
+  write -> read should be symmetric                       $readwrite
+  create -> move -> exist should always be true           $move
+  can get paths from a glob pattern                       $glob
+  read / write lines should be like String#lines          $lines
+  copy to local file should download the file             $copyToLocalFile
+  copy to local file should not create crc                $copyToLocalFileNoCrc
+  copy to temp local should download the files            $copyToTempLocal
+  copy from local file should download the file           $copyFromLocalFile
+  createTempDir -> exists should always be true           $createTempDir
+  createTempDir doesn't create the same dir twice         $createTempDir2
+  withTempDir should create a temp dir and then delete it $withTempDir
 
 Hdfs avro:
   can read / write avro records                   $avro
@@ -245,6 +247,29 @@ Hdfs avro:
   def lines = prop((p: Path, lines: List[Identifier]) =>
     (Hdfs.write(p, lines.map(_.value).mkString("\n")) >> Hdfs.lines(p)) must beValue {
       lines.map(_.value).mkString("\n").lines.toList })
+
+  def createTempDir = {
+    (Hdfs.createTempDir() >>= Hdfs.exists) must beValue(true)
+  }
+
+  def createTempDir2 = {
+    val isSame = for {
+      p1 <- Hdfs.createTempDir()
+      p2 <- Hdfs.createTempDir()
+    } yield p1 == p2
+
+    isSame must beValue(false)
+  }
+
+  def withTempDir = {
+    val hdfs = for {
+      x               <- Hdfs.withTempDir(p => Hdfs.exists(p).map((p, _)))
+      (path, existed) = x
+      exists          <- Hdfs.exists(path)
+    } yield (existed, exists)
+
+    hdfs must beValue((true, false))
+  }
 
   def avro = prop((p: Path, s1: String, s2: String) =>
     (Hdfs.writeAvro[String](p, List(s1, s2), Schema.create(Schema.Type.STRING)) >> Hdfs.readAvro[String](p)) must beResultLike {

@@ -18,6 +18,7 @@ import scala.util.control.NonFatal
 import scala.collection.JavaConverters._
 
 import java.io.File
+import java.util.UUID
 
 import scalaz._, Scalaz._
 
@@ -175,7 +176,7 @@ object Hdfs {
     withFilesystem(_.create(path))
 
   /** Delete the specified path on HDFS */
-  def delete(path: Path, recDelete: Boolean=false): Hdfs[Boolean] =
+  def delete(path: Path, recDelete: Boolean = false): Hdfs[Boolean] =
     withFilesystem(_.delete(path, recDelete)).setMessage(s"Could not delete path $path")
 
   /** Create directory on HDFS with specified `path`. */
@@ -237,6 +238,25 @@ object Hdfs {
       tmpFile.deleteOnExit()
       copyToLocalFile(hdfsPath, tmpFile).map(f => hdfsPath -> f)
     }).sequence
+
+  /** Creates a temp HDFS directory */
+  def createTempDir(prefix: String = "tmp_", suffix: String = ""): Hdfs[Path] = {
+    val tmpPath = new Path(s"/tmp/${prefix}${UUID.randomUUID}${suffix}")
+    for {
+      exists <- exists(tmpPath)
+      path   <- if (exists) createTempDir(prefix, suffix) // Try again if the random path already exists this should be extremly rare.
+                else 
+                  mandatory(mkdirs(tmpPath), s"Can't create tmp dir $tmpPath")
+                    .map(_ => tmpPath)
+    } yield path
+  }
+
+  /** Performs the given action on a temporary directory and then deletes the temporary directory. */
+  def withTempDir[A](action: Path => Hdfs[A]): Hdfs[A] = for {
+    path <- createTempDir()
+    res  <- action(path)
+    _    <- mandatory(delete(path, true), s"Was not able to delete tmp dir $path")
+  } yield res
 
   /** Convenience for constructing `Path` types from strings. */
   def path(path: String): Path =
