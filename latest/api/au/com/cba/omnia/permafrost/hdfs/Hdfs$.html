@@ -39,7 +39,7 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/CommBank/permafrost/tree/fbfcb0993b5a4e8d9127f3c4a5c6dd2620a0c305//src/main/scala/au/com/cba/omnia/permafrost/hdfs/Hdfs.scala" target="_blank">Hdfs.scala</a></dd></dl><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/CommBank/permafrost/tree/fe5d956b8c602ff114815e9465ab9eb306d479d6//src/main/scala/au/com/cba/omnia/permafrost/hdfs/Hdfs.scala" target="_blank">Hdfs.scala</a></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -261,6 +261,19 @@
       </span>
       </h4>
       <p class="shortcomment cmt">Create file on HDFS with specified <code>path</code>.</p>
+    </li><li name="au.com.cba.omnia.permafrost.hdfs.Hdfs#createTempDir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="createTempDir(prefix:String,suffix:String):au.com.cba.omnia.permafrost.hdfs.Hdfs[org.apache.hadoop.fs.Path]"></a>
+      <a id="createTempDir(String,String):Hdfs[Path]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">createTempDir</span><span class="params">(<span name="prefix">prefix: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;tmp_&quot;</span></span>, <span name="suffix">suffix: <span class="extype" name="scala.Predef.String">String</span> = <span class="symbol">&quot;&quot;</span></span>)</span><span class="result">: <a href="Hdfs.html" class="extype" name="au.com.cba.omnia.permafrost.hdfs.Hdfs">Hdfs</a>[<span class="extype" name="org.apache.hadoop.fs.Path">Path</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Creates a temp HDFS directory</p>
     </li><li name="au.com.cba.omnia.permafrost.hdfs.Hdfs#delete" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="delete(path:org.apache.hadoop.fs.Path,recDelete:Boolean):au.com.cba.omnia.permafrost.hdfs.Hdfs[Boolean]"></a>
       <a id="delete(Path,Boolean):Hdfs[Boolean]"></a>
@@ -813,6 +826,19 @@ quite meet the required laws.
       </span>
       </h4>
       <p class="shortcomment cmt">Produce a value based upon a HDFS FileSystem.</p>
+    </li><li name="au.com.cba.omnia.permafrost.hdfs.Hdfs#withTempDir" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="withTempDir[A](action:org.apache.hadoop.fs.Path=&gt;au.com.cba.omnia.permafrost.hdfs.Hdfs[A]):au.com.cba.omnia.permafrost.hdfs.Hdfs[A]"></a>
+      <a id="withTempDir[A]((Path)⇒Hdfs[A]):Hdfs[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">withTempDir</span><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="action">action: (<span class="extype" name="org.apache.hadoop.fs.Path">Path</span>) ⇒ <a href="Hdfs.html" class="extype" name="au.com.cba.omnia.permafrost.hdfs.Hdfs">Hdfs</a>[<span class="extype" name="au.com.cba.omnia.permafrost.hdfs.Hdfs.withTempDir.A">A</span>]</span>)</span><span class="result">: <a href="Hdfs.html" class="extype" name="au.com.cba.omnia.permafrost.hdfs.Hdfs">Hdfs</a>[<span class="extype" name="au.com.cba.omnia.permafrost.hdfs.Hdfs.withTempDir.A">A</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Performs the given action on a temporary directory and then deletes the temporary directory.</p>
     </li><li name="au.com.cba.omnia.permafrost.hdfs.Hdfs#write" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="write(path:org.apache.hadoop.fs.Path,content:String,encoding:String):au.com.cba.omnia.permafrost.hdfs.Hdfs[Unit]"></a>
       <a id="write(Path,String,String):Hdfs[Unit]"></a>
