@@ -58,20 +58,7 @@
 
         <div id="types" class="types members">
               <h3>Type Members</h3>
-              <ol><li name="au.com.cba.omnia.permafrost.hdfs.Error" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Error[A]extendsResult[A]withProductwithSerializable"></a>
-      <a id="Error[A]:Error[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Error.html"><span class="name">Error</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="error">error: <span class="extype" name="scalaz.TheseInstances.These">scalaz.\&amp;/.These</span>[<span class="extype" name="scala.Predef.String">String</span>, <span class="extype" name="scala.Throwable">Throwable</span>]</span>)</span><span class="result"> extends <a href="Result.html" class="extype" name="au.com.cba.omnia.permafrost.hdfs.Result">Result</a>[<span class="extype" name="au.com.cba.omnia.permafrost.hdfs.Error.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">Failing <code>Result</code>, public so it can be used for pattern matching, prefer Result.</p>
-    </li><li name="au.com.cba.omnia.permafrost.hdfs.Hdfs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="au.com.cba.omnia.permafrost.hdfs.Hdfs" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="Hdfs[A]extendsProductwithSerializable"></a>
       <a id="Hdfs[A]:Hdfs[A]"></a>
       <h4 class="signature">
@@ -80,7 +67,7 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="Hdfs.html"><span class="name">Hdfs</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="run">run: (<span class="extype" name="org.apache.hadoop.conf.Configuration">Configuration</span>) ⇒ <a href="Result.html" class="extype" name="au.com.cba.omnia.permafrost.hdfs.Result">Result</a>[<span class="extype" name="au.com.cba.omnia.permafrost.hdfs.Hdfs.A">A</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="Hdfs.html"><span class="name">Hdfs</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="run">run: (<span class="extype" name="org.apache.hadoop.conf.Configuration">Configuration</span>) ⇒ <span class="extype" name="au.com.cba.omnia.omnitool.Result">Result</span>[<span class="extype" name="au.com.cba.omnia.permafrost.hdfs.Hdfs.A">A</span>]</span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">A data-type that represents a HDFS operation.</p>
@@ -136,33 +123,6 @@
       </span>
       </h4>
       
-    </li><li name="au.com.cba.omnia.permafrost.hdfs.Ok" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Ok[A]extendsResult[A]withProductwithSerializable"></a>
-      <a id="Ok[A]:Ok[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">case class</span>
-      </span>
-      <span class="symbol">
-        <a href="Ok.html"><span class="name">Ok</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="params">(<span name="value">value: <span class="extype" name="au.com.cba.omnia.permafrost.hdfs.Ok.A">A</span></span>)</span><span class="result"> extends <a href="Result.html" class="extype" name="au.com.cba.omnia.permafrost.hdfs.Result">Result</a>[<span class="extype" name="au.com.cba.omnia.permafrost.hdfs.Ok.A">A</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">Successful <code>Result</code>, public so it can be used for pattern matching, prefer Result.</p>
-    </li><li name="au.com.cba.omnia.permafrost.hdfs.Result" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
-      <a id="Result[A]extendsAnyRef"></a>
-      <a id="Result[A]:Result[A]"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier">sealed </span>
-        <span class="kind">trait</span>
-      </span>
-      <span class="symbol">
-        <a href="Result.html"><span class="name">Result</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
-      </span>
-      </h4>
-      <p class="comment cmt">A data-type useful for representing the result of a possibly failing
-operation.</p>
     </li></ol>
             </div>
 
@@ -222,19 +182,6 @@ operation.</p>
       </span>
       </h4>
       <p class="comment cmt">Utility functions for working with Hive partitions on HDFS.</p>
-    </li><li name="au.com.cba.omnia.permafrost.hdfs.Result" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="Result"></a>
-      <a id="Result:Result"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">object</span>
-      </span>
-      <span class="symbol">
-        <a href="Result$.html"><span class="name">Result</span></a>
-      </span>
-      </h4>
-      
     </li></ol>
             </div>
 
