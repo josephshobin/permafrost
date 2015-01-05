@@ -15,7 +15,6 @@
 package au.com.cba.omnia.permafrost.hdfs
 
 import java.io.{File, FileWriter}
-import java.io.FileWriter
 
 import scalaz._, Scalaz._
 import scalaz.scalacheck.ScalazProperties.monad
@@ -27,6 +26,9 @@ import org.apache.hadoop.conf.Configuration
 
 import org.apache.avro.Schema
 
+import au.com.cba.omnia.omnitool.{Result, Ok, Error}
+import au.com.cba.omnia.omnitool.test.Arbitraries._
+
 import au.com.cba.omnia.permafrost.test.{HdfsTest, Identifier}
 import au.com.cba.omnia.permafrost.test.Arbitraries._
 
@@ -35,7 +37,7 @@ Hdfs Operations
 ===============
 
 Hdfs operations should:
-  obey monad laws                                         $laws
+  obey monad laws                                         ${monad.laws[Hdfs]}
   ||| is alias for `or`                                   $orAlias
   or stops at first succeess                              $orFirstOk
   or continues at first Error                             $orFirstError
@@ -74,9 +76,6 @@ Hdfs avro:
   can read / write avro records                   $avro
 
 """
-
-  def laws =
-    monad.laws[Hdfs]
 
   def orAlias = prop((x: Hdfs[Int], y: Hdfs[Int]) =>
     (x ||| y).run(new Configuration) must_== (x or y).run(new Configuration))

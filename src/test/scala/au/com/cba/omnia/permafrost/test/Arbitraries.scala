@@ -16,12 +16,12 @@ package au.com.cba.omnia.permafrost.test
 
 import org.apache.hadoop.conf.Configuration
 
-import scalaz._, Scalaz._, \&/._
-import scalaz.scalacheck.ScalazArbitrary._
+import org.scalacheck.{Arbitrary, Gen}
 
-import org.scalacheck.{Arbitrary, Gen}, Arbitrary._
+import au.com.cba.omnia.omnitool.{Result, Ok, Error}
+import au.com.cba.omnia.omnitool.test.Arbitraries._
 
-import au.com.cba.omnia.permafrost.hdfs.{Hdfs, Result, Ok, Error}
+import au.com.cba.omnia.permafrost.hdfs.Hdfs
 
 /**
   * Arbitraries for permafrost types
@@ -30,17 +30,10 @@ import au.com.cba.omnia.permafrost.hdfs.{Hdfs, Result, Ok, Error}
   */
 object Arbitraries {
   implicit def HdfsIntArbitrary: Arbitrary[Hdfs[Int]] =
-    Arbitrary(arbitrary[Configuration => Result[Int]] map (Hdfs(_)))
+    Arbitrary(Arbitrary.arbitrary[Configuration => Result[Int]] map (Hdfs(_)))
 
   implicit def HdfsBooleanArbitrary: Arbitrary[Hdfs[Boolean]] =
-    Arbitrary(arbitrary[Configuration => Result[Boolean]] map (Hdfs(_)))
-
-  implicit def ResultAribtary[A: Arbitrary]: Arbitrary[Result[A]] =
-    Arbitrary(arbitrary[Either[These[String, Throwable], A]] map {
-      case Left(v)  => Error(v)
-      case Right(v) => Ok(v)
-    })
-
+    Arbitrary(Arbitrary.arbitrary[Configuration => Result[Boolean]] map (Hdfs(_)))
 }
 
 case class Identifier(value: String)

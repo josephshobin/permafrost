@@ -22,7 +22,9 @@ import org.scalacheck.{Gen, Arbitrary}, Arbitrary._
 import org.specs2.matcher.{Expectable, Matcher}
 import org.specs2.execute.{Result => SpecResult}
 
-import au.com.cba.omnia.permafrost.hdfs.{Hdfs, Result, Ok, Error}
+import au.com.cba.omnia.omnitool.{Result, Ok, Error}
+
+import au.com.cba.omnia.permafrost.hdfs.Hdfs
 
 /**
  * This trait is designed to be mixed into a base Specification

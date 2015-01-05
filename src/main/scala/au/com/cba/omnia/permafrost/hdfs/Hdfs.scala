@@ -31,6 +31,8 @@ import org.apache.avro.mapred.FsInput
 import org.apache.avro.specific.{SpecificDatumReader, SpecificDatumWriter}
 import org.apache.avro.util.Utf8
 
+import au.com.cba.omnia.omnitool.Result
+
 import au.com.cba.omnia.permafrost.io.Streams
 
 /**
@@ -46,10 +48,7 @@ case class Hdfs[A](run: Configuration => Result[A]) {
 
   /** Bind through successful Hdfs operations. */
   def flatMap[B](f: A => Hdfs[B]): Hdfs[B] =
-    Hdfs(c => run(c) match {
-      case Error(e) => Error(e)
-      case Ok(a)    => f(a).run(c)
-    })
+    Hdfs(c => run(c).flatMap(f(_).run(c)))
 
   /** Chain an unsafe operation through a successful Hdfs operation. */
   def safeMap[B](f: A => B): Hdfs[B] =
