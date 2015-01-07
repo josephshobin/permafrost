@@ -17,6 +17,7 @@ package au.com.cba.omnia.permafrost.hdfs
 import java.io.{File, FileWriter}
 
 import scalaz._, Scalaz._
+import scalaz.\&/.{This, That}
 import scalaz.scalacheck.ScalazProperties.monad
 
 import org.scalacheck.Arbitrary, Arbitrary.arbitrary
@@ -43,6 +44,9 @@ Hdfs operations should:
   or continues at first Error                             $orFirstError
   mandatory success iif result is true                    $mandatoryMeansTrue
   forbidden success iif result is false                   $forbiddenMeansFalse
+  recoverWith for all cases is the same as |||            $recoverWith
+  recoverWith only recovers the specified errors          $recoverWithSpecific
+  bracket always executes `after` action                  $bracket
 
 Hdfs construction:
   result is constant                                      $result
@@ -106,6 +110,34 @@ Hdfs avro:
       case (Error(_), Error(_)) => ok
     }
   })
+
+  def recoverWith = prop((x: Hdfs[Int], y: Hdfs[Int]) =>
+    (x.recoverWith { case _ => y}).run(new Configuration) must_== (x ||| y).run(new Configuration)
+  )
+
+  def recoverWithSpecific = {
+    val r = Result.fail[Int]("test")
+    val a = Hdfs.result(r)
+    a.recoverWith { case This(_) => Hdfs.value(3) } must beValue(3)
+    a.recoverWith { case That(_) => Hdfs.value(3) } must beResult(r)
+  }
+
+  def bracket = {
+    val test = new Path("test")
+    val action1 = for {
+      value  <- Hdfs.mkdirs(test).bracket(_ => Hdfs.delete(test, true))(_ => Hdfs.fail[Int]("fail"))
+                  .recoverWith { case _ => Hdfs.value(3) }
+      exists <- Hdfs.exists(test)
+    } yield (3, exists)
+
+    val action2 = for {
+      value  <- Hdfs.mkdirs(test).bracket(_ => Hdfs.delete(test, true))(Hdfs.value(_))
+      exists <- Hdfs.exists(test)
+    } yield (value, exists)
+
+    action1 must beValue((3, false))
+    action2 must beValue((true, false))
+  }
 
   def result = prop((v: Result[Int]) =>
     Hdfs.result(v) must beResult { v })

@@ -86,23 +86,25 @@ case class Hdfs[A](run: Configuration => Result[A]) {
       error => recovery.andThen(_.run(c)).applyOrElse(error, Result.these)
     ))
 
-  /** 
-    * Ensures that the specified action is executed after this action regardless of if this action
-    * succeeds or fails
-    * 
-    * If the specified action fails, the action overall fails.
+  /** Like "finally", but only performs the final action if there was an error. */
+  def onException[B](action: Hdfs[B]): Hdfs[A] =
+    this.recoverWith { case e => action >> Hdfs.result(Result.these(e)) }
+
+  /**
+    * Applies the "during" action, calling "after" regardless of whether there was an error.
+    * All errors are rethrown. Generalizes try/finally.
     */
-  def ensure(action: Hdfs[Unit]): Hdfs[A] = Hdfs { c =>
-    val res = run(c)
-    // Ensure that we preserve the original error
-    action.run(c).fold(
-      _     => res,
-      error => res.fold(
-        _         => Result.these(error),
-        errorOrig => Result.these(errorOrig)
-      )
-    )
-  }
+  def bracket[B, C](after: A => Hdfs[B])(during: A => Hdfs[C]): Hdfs[C] = for {
+    a <- this
+    r <- during(a) onException after(a)
+    _ <- after(a)
+  } yield r
+
+  /** Like "bracket", but takes only a computation to run afterward. Generalizes "finally". */
+  def ensuring[B](sequel: Hdfs[B]): Hdfs[A] = for {
+    r <- onException(sequel)
+    _ <- sequel
+  } yield r
 }
 
 /** Hdfs operations */
@@ -278,10 +280,10 @@ object Hdfs {
   }
 
   /** Performs the given action on a temporary directory and then deletes the temporary directory. */
-  def withTempDir[A](action: Path => Hdfs[A]): Hdfs[A] = for {
-    path <- createTempDir()
-    res  <- action(path).ensure(mandatory(delete(path, true), s"Was not able to delete tmp dir $path"))
-  } yield res
+  def withTempDir[A](action: Path => Hdfs[A]): Hdfs[A] =
+    createTempDir().bracket(
+      p => mandatory(delete(p, true), s"Was not able to delete tmp dir $p")
+    )(action)
 
   /** Convenience for constructing `Path` types from strings. */
   def path(path: String): Path =
