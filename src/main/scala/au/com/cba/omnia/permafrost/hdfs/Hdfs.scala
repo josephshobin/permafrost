@@ -21,6 +21,7 @@ import java.io.File
 import java.util.UUID
 
 import scalaz._, Scalaz._
+import scalaz.\&/.These
 
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{ChecksumFileSystem, FileSystem, Path, FSDataInputStream, FSDataOutputStream}
@@ -77,8 +78,34 @@ case class Hdfs[A](run: Configuration => Result[A]) {
   /** Alias for `or`. Provides nice syntax: `Hdfs.create("bad path") ||| Hdfs.create("good path")` */
   def |||(other: => Hdfs[A]): Hdfs[A] =
     or(other)
+
+  /** Recovers from an error. */
+  def recoverWith(recovery: PartialFunction[These[String, Throwable], Hdfs[A]]): Hdfs[A] =
+    Hdfs(c => run(c).fold(
+      res   => Result.ok(res),
+      error => recovery.andThen(_.run(c)).applyOrElse(error, Result.these)
+    ))
+
+  /** 
+    * Ensures that the specified action is executed after this action regardless of if this action
+    * succeeds or fails
+    * 
+    * If the specified action fails, the action overall fails.
+    */
+  def ensure(action: Hdfs[Unit]): Hdfs[A] = Hdfs { c =>
+    val res = run(c)
+    // Ensure that we preserve the original error
+    action.run(c).fold(
+      _     => res,
+      error => res.fold(
+        _         => Result.these(error),
+        errorOrig => Result.these(errorOrig)
+      )
+    )
+  }
 }
 
+/** Hdfs operations */
 object Hdfs {
   /** Build a HDFS operation from a result. */
   def result[A](v: Result[A]): Hdfs[A] =
@@ -253,8 +280,7 @@ object Hdfs {
   /** Performs the given action on a temporary directory and then deletes the temporary directory. */
   def withTempDir[A](action: Path => Hdfs[A]): Hdfs[A] = for {
     path <- createTempDir()
-    res  <- action(path)
-    _    <- mandatory(delete(path, true), s"Was not able to delete tmp dir $path")
+    res  <- action(path).ensure(mandatory(delete(path, true), s"Was not able to delete tmp dir $path"))
   } yield res
 
   /** Convenience for constructing `Path` types from strings. */
