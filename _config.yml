@@ -2,4 +2,4 @@ name: permafrost
 exclude: [Gemfile]
 markdown: kramdown
 
-releaseVersion:  "0.2.0-20150108022704-de9f295"
+releaseVersion:  "0.2.0-20150113073328-8994d5b"
